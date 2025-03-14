@@ -9,7 +9,6 @@ public class DialogueSystem : MonoBehaviour
     [Serializable]
     public class DialoguePreData
     {
-        public int indexText;
         public DialogueData preDialogueData;
         [Space]
         public UnityEvent onDialogueFinished;
@@ -19,7 +18,6 @@ public class DialogueSystem : MonoBehaviour
     [Serializable]
     public class QuestionPreData
     {
-        public int indexText;
         public QuestionData preQuestionData;
         [Space]
         public UnityEvent onChoiceCorrectEnd;
@@ -34,7 +32,8 @@ public class DialogueSystem : MonoBehaviour
 
     private int currentLine;
     public float typingSpeed = 0.05f;
-    public bool isChoiceEnd = false;
+    private bool isChoiceEnd = false;
+    private bool choiceInProgress = false;
 
     private List<GameObject> choiceButtons = new List<GameObject>();
 
@@ -43,7 +42,7 @@ public class DialogueSystem : MonoBehaviour
         int _indexTemp = 0;
         foreach (DialoguePreData value in preDialoguesDatas)
         {
-            if (value.indexText != indexDialogueData)
+            if (value.preDialogueData.DialogueID != indexDialogueData)
             {
                 _indexTemp++;
             }
@@ -65,6 +64,10 @@ public class DialogueSystem : MonoBehaviour
     {
         if (currentDialogue == null) return;
 
+        if (choiceInProgress)
+        {
+            GameManager.instance.GameEnd();
+        }
         if (isChoiceEnd && Input.GetKeyDown(UIManager.instance.dialogueKey)) 
         {
             EndDialogue();
@@ -113,7 +116,7 @@ public class DialogueSystem : MonoBehaviour
         int _indexTemp = 0;
         foreach (QuestionPreData value in preQuestionsDatas)
         {
-            if (value.indexText != indexDataQuestion)
+            if (value.preQuestionData.QuestionID != indexDataQuestion)
             {
                 _indexTemp++;
             }
@@ -123,8 +126,8 @@ public class DialogueSystem : MonoBehaviour
             }
         }
 
-        GameManager.instance.GameEnd();
-        currentQuestion = preQuestionsDatas[indexDataQuestion];
+        choiceInProgress = true;
+        currentQuestion = preQuestionsDatas[_indexTemp];
         UIManager.instance.ShowChoicesPanel(true);
         UIManager.instance.ShowDialoguePanel(false);
         UIManager.instance.GetQuestionText().text = currentQuestion.preQuestionData.questionText;
@@ -171,6 +174,7 @@ public class DialogueSystem : MonoBehaviour
         UIManager.instance.ShowChoicesPanel(false);
         UIManager.instance.GetDialogueText().text = currentQuestion.preQuestionData.correctFeedback;
         currentQuestion.onChoiceCorrectEnd?.Invoke();
+        choiceInProgress = false;
         isChoiceEnd = true;
     }
 
@@ -181,6 +185,7 @@ public class DialogueSystem : MonoBehaviour
         UIManager.instance.GetDialogueText().text = currentQuestion.preQuestionData.incorrectFeedback;
         currentQuestion.onChoiceIncorrectEnd?.Invoke();
         isChoiceEnd = true;
+        choiceInProgress = false;
     }
 
     public void EndDialogue()

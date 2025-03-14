@@ -11,18 +11,21 @@ public class QuestionData : ScriptableObject
     [TextArea(3, 3)] public string incorrectFeedback = "Incorrecto. Intenta de nuevo.";
     public int correctAnswerIndex;
 
-    private static readonly string idQuestion = "LastQuestionID";
+    private string idQuestion = "LastQuestionID";
 
     [SerializeField] private int questionID;
     public int QuestionID => questionID;
 
-    public void OnEnable()
+    bool haveId = false;
+    public void Awake()
     {
         if (questionID > 0) { return; }
+        if (haveId) { return; }
         int lastID = PlayerPrefs.GetInt(idQuestion, 0);
         lastID++;
         PlayerPrefs.SetInt(idQuestion, lastID);
         PlayerPrefs.Save();
         questionID = lastID;
+        haveId = true;
     }
 }
