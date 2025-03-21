@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEditor;
 
 public enum InteractionType
 {
     GenerateCards,
     StartDialogue,
     StartMoving,
-    StartTypingGame
+    StartTypingGame,
+    StartSyllableGame,
 }
 
 public class InteractableOptions : MonoBehaviour
@@ -18,10 +20,16 @@ public class InteractableOptions : MonoBehaviour
     private MemoryGameController memoryGameController;
 
     [SerializeField] private InteractionType interactionType;
-    [SerializeField] private int ID;
-    [SerializeField] private MovableObject movableObject;
-    [SerializeField] private bool possibleInteract = true;
+    public InteractionType InteractionType { get => interactionType; set => interactionType = value; }
+
+    public int iD;
+
+    public MovableObject movableObject;
+
+    public static bool possibleInteract = true;
     private bool isPlayerInTrigger = false;
+
+    [SerializeField] private bool justAnInterraction = false;
 
     void Start()
     {
@@ -35,7 +43,7 @@ public class InteractableOptions : MonoBehaviour
         {
             if (Input.GetKeyDown(UIManager.instance.dialogueKey) && isPlayerInTrigger)
             {
-                if (!UIManager.instance.IsDialogueActive())
+                if (!UIManager.instance.IsInterractionActive())
                 {
                     ExecuteInteraction();
                     UIManager.instance.ShowInteractablePanel(false);
@@ -47,14 +55,15 @@ public class InteractableOptions : MonoBehaviour
 
     private void ExecuteInteraction()
     {
-        switch (interactionType)
+        if (justAnInterraction) { StopInterract(); }
+        switch (InteractionType)
         {
             case InteractionType.GenerateCards:
                 memoryGameController?.StartMemoryGame();
                 break;
 
             case InteractionType.StartDialogue:
-                dialogueSystem?.StartDialogue(ID);
+                dialogueSystem?.StartDialogue(iD);
                 break;
             
             case InteractionType.StartMoving:
@@ -63,7 +72,11 @@ public class InteractableOptions : MonoBehaviour
 
             case InteractionType.StartTypingGame:
                 GameManager.instance.TypingGameStart();
-                    break;
+                break;
+
+            case InteractionType.StartSyllableGame:
+                GameManager.instance.SyllableGameStart();
+                break;
         }
     }
 
@@ -71,4 +84,5 @@ public class InteractableOptions : MonoBehaviour
     public void PlayerOutTrigger() => isPlayerInTrigger = false; 
     public void StartInterract() => possibleInteract = true;
     public void StopInterract() => possibleInteract = false;
+    public void ShowInteractionPanel(bool state) => UIManager.instance.ShowInteractablePanel(state);
 }

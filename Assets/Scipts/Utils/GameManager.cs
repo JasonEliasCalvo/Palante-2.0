@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public DelegatedGameStates eventTypingGameStart;
     public DelegatedGameStates eventTypingGameReset;
     public DelegatedGameStates eventTypingGameEnd;
+    public DelegatedGameStates eventSyllableGameStart;
+    public DelegatedGameStates eventSyllableGameEnd;
     public static GameManager instance;
 
     private Timer timer;
@@ -64,6 +66,16 @@ public class GameManager : MonoBehaviour
     public void TypingGameEnd()
     {
         eventTypingGameEnd?.Invoke();
+    }
+
+    public void SyllableGameStart()
+    {
+        eventSyllableGameStart?.Invoke();
+    }
+
+    public void SyllableGameEnd()
+    {
+        eventSyllableGameEnd?.Invoke();
     }
 
     public void GameEnd()

@@ -16,6 +16,8 @@ public class TriggerZone : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        if(!InteractableOptions.possibleInteract) { return; }
+
         if (other.CompareTag(interactionTag))
         {
             onTriggerEnter.Invoke();
@@ -24,6 +26,8 @@ public class TriggerZone : MonoBehaviour
 
     public void OnTriggerStay(Collider other)
     {
+        if (!InteractableOptions.possibleInteract) { return; }
+
         if (other.CompareTag(interactionTag))
         {
             onTriggerStay.Invoke();

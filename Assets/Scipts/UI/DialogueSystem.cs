@@ -24,11 +24,11 @@ public class DialogueSystem : MonoBehaviour
         public UnityEvent onChoiceIncorrectEnd;
     }
 
-    private DialoguePreData currentDialogue;
-    private QuestionPreData currentQuestion;
-
     public List<DialoguePreData> preDialoguesDatas = new List<DialoguePreData>();
     public List<QuestionPreData> preQuestionsDatas = new List<QuestionPreData>();
+
+    private DialoguePreData currentDialogue;
+    private QuestionPreData currentQuestion;
 
     private int currentLine;
     public float typingSpeed = 0.05f;
@@ -202,6 +202,4 @@ public class DialogueSystem : MonoBehaviour
         GameManager.instance.GameStart();
         isChoiceEnd = false;
     }
-
-
 }
