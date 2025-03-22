@@ -30,13 +30,17 @@ public class SyllableGame : MonoBehaviour
     private void Start()
     {
         GameManager.instance.eventSyllableGameStart += StartGame;
-        livesText.text = "Vidas: " + lives;
+        GameManager.instance.eventSyllableGameEnd += SyllableGameEnd;
     }
 
     private void StartGame()
     {
+        currentWordIndex = 0;
+        correctAnswers = 0;
+        lives = 3;
+        livesText.text = "Vidas: " + lives;
         UIManager.instance.ShowSyllableGamePanel(true);
-        GameManager.instance.GameEnd();
+        GameManager.instance.InitialGameEnd();
 
         remainingWords = new List<WordData>(wordList);
 
@@ -58,10 +62,7 @@ public class SyllableGame : MonoBehaviour
 
         if (lives <= 0)
         {
-            UIManager.instance.ShowSyllableGamePanel(false);
-            remainingWords = new List<WordData>(wordList);
-            GameManager.instance.GameStart();
-            GameManager.instance.SyllableGameEnd();
+            SyllableGameEnd();
             return;
         }
 
@@ -122,9 +123,13 @@ public class SyllableGame : MonoBehaviour
     private void SyllableGameWin()
     {
         Debug.Log("Ganaste");
+        SyllableGameEnd();
+
+    }
+
+    private void SyllableGameEnd()
+    {
         UIManager.instance.ShowSyllableGamePanel(false);
-        GameManager.instance.GameStart();
-        remainingWords = new List<WordData>(wordList);
-        GameManager.instance.SyllableGameEnd();
+        GameManager.instance.InitialGameStart();
     }
 }

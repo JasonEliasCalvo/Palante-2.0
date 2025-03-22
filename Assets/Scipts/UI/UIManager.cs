@@ -24,18 +24,6 @@ public class UIManager : MonoBehaviour
     [Header("UI Settings")]
     public KeyCode dialogueKey = KeyCode.F;
 
-    [Serializable]
-    public class DialogueUI
-    {
-        public GameObject interactablePanel;
-        public GameObject dialoguePanel;
-        public GameObject choicesPanel; 
-        public TextMeshProUGUI dialogueText;
-        public TextMeshProUGUI choicesText;
-        public Transform choicesContainer;
-        public GameObject choiceButtonPrefab;
-    }
-
     public class TypingUI
     {
         public GameObject typingPanel;
@@ -45,12 +33,6 @@ public class UIManager : MonoBehaviour
     {
         public GameObject syllableGamePanel;
     }
-
-
-    [Header("Elementos de la UI")]
-    [SerializeField] private DialogueUI dialogueUI;
-
-    public DialogueUI GetDialogueUI() => dialogueUI;
 
     private void Awake()
     {

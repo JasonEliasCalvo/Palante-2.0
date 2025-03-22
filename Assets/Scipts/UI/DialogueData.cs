@@ -13,18 +13,4 @@ public class DialogueData : ScriptableObject
 
     [SerializeField] private int dialogueID;
     public int DialogueID => dialogueID;
-
-    bool haveId = false;
-
-    public void Awake()
-    {
-        if (dialogueID > 0) { return; }
-        if (haveId) { return; }
-        int lastID = PlayerPrefs.GetInt(idDialogue, 0);
-        lastID++;
-        PlayerPrefs.SetInt(idDialogue, lastID);
-        PlayerPrefs.Save();
-        dialogueID = lastID;
-        haveId = true;
-    }
 }

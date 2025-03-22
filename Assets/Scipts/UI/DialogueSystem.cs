@@ -57,7 +57,7 @@ public class DialogueSystem : MonoBehaviour
         UIManager.instance.ShowDialoguePanel(true);
         UIManager.instance.ShowChoicesPanel(false);
         StartCoroutine(ShowDialogueLine());
-        GameManager.instance.GameEnd();
+        GameManager.instance.InitialGameEnd();
     }
 
     private void Update()
@@ -66,7 +66,7 @@ public class DialogueSystem : MonoBehaviour
 
         if (choiceInProgress)
         {
-            GameManager.instance.GameEnd();
+            GameManager.instance.InitialGameEnd();
         }
         if (isChoiceEnd && Input.GetKeyDown(UIManager.instance.dialogueKey)) 
         {
@@ -199,7 +199,7 @@ public class DialogueSystem : MonoBehaviour
         currentLine = 0;
         UIManager.instance.GetDialogueText().text = string.Empty;
         UIManager.instance.ShowDialoguePanel(false);
-        GameManager.instance.GameStart();
+        GameManager.instance.InitialGameStart();
         isChoiceEnd = false;
     }
 }

@@ -21,7 +21,7 @@ public class MemoryGameController : MonoBehaviour
     {
         GenerateCards();
         cam.SetActive(true);
-        GameManager.instance.GameEnd();
+        GameManager.instance.InitialGameEnd();
     }
 
     public void GenerateCards()
@@ -111,7 +111,7 @@ public class MemoryGameController : MonoBehaviour
     private void GameOver()
     {
         cam.gameObject.SetActive(false);
-        GameManager.instance.GameStart();
+        GameManager.instance.InitialGameStart();
         Debug.Log("🎉 ¡Ganaste! Todas las cartas han sido emparejadas.");
     }
 }

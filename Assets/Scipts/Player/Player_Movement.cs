@@ -42,8 +42,8 @@ public class Player_Movement : MonoBehaviour
         _fall = new FallState(this);
         ChangeState(_idle);
 
-        GameManager.instance.eventGameStart += ActiveMovement;
-        GameManager.instance.eventGameEnd += DeactivateMovement;
+        GameManager.instance.eventInitialGameStart += ActiveMovement;
+        GameManager.instance.eventInitialGameEnd += DeactivateMovement;
     }
 
     void Update()
