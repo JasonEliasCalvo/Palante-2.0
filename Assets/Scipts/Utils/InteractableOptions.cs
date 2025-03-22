@@ -10,6 +10,7 @@ public enum InteractionType
     GenerateCards,
     StartDialogue,
     StartMoving,
+    StopMoving,
     StartTypingGame,
     StartSyllableGame,
 }
@@ -26,7 +27,7 @@ public class InteractableOptions : MonoBehaviour
 
     public MovableObject movableObject;
 
-    public static bool possibleInteract = true;
+    public bool possibleInteract = true;
     private bool isPlayerInTrigger = false;
 
     [SerializeField] private bool justAnInterraction = false;
@@ -43,7 +44,7 @@ public class InteractableOptions : MonoBehaviour
         {
             if (Input.GetKeyDown(UIManager.instance.dialogueKey) && isPlayerInTrigger)
             {
-                if (!UIManager.instance.IsInterractionActive())
+                if (!UIManager.instance.IsPanelActive())
                 {
                     ExecuteInteraction();
                     UIManager.instance.ShowInteractablePanel(false);
@@ -67,7 +68,11 @@ public class InteractableOptions : MonoBehaviour
                 break;
             
             case InteractionType.StartMoving:
-                movableObject.StartMoving();
+                movableObject?.StartMoving();
+                break;
+
+            case InteractionType.StopMoving:
+                movableObject?.StopMoving();
                 break;
 
             case InteractionType.StartTypingGame:

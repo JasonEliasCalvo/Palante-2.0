@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionType: 1
-  ID: 1
+  iD: 0
   movableObject: {fileID: 0}
   possibleInteract: 1
   justAnInterraction: 0
@@ -94,6 +94,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TriggerZone
       objectReference: {fileID: 0}
+    - target: {fileID: 4592965017756365739, guid: 408180d7b391ab641ac404ec112b0bf8, type: 3}
+      propertyPath: interactableOptions
+      value: 
+      objectReference: {fileID: 8156651896701303038}
     - target: {fileID: 4592965017756365739, guid: 408180d7b391ab641ac404ec112b0bf8, type: 3}
       propertyPath: onTriggerExit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
