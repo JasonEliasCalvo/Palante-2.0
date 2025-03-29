@@ -34,6 +34,9 @@ public class InteractableOptionsEditor : Editor
             case InteractionType.StartMoving:
                 EditorGUILayout.PropertyField(movableObjectProp, new GUIContent("Objeto"));
                 break;
+            case InteractionType.StopMoving:
+                EditorGUILayout.PropertyField(movableObjectProp, new GUIContent("Objeto"));
+                break;
         }
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("justAnInterraction"), new GUIContent("Solo una interacción"));

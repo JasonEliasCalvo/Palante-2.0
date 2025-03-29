@@ -11,8 +11,8 @@ public class MemoryGameController : MonoBehaviour
     [SerializeField] private int columns = 4;
     [SerializeField] private float spacing = 1f;
 
-    private List<MemoryCard> cards = new List<MemoryCard>();
-    private Vector3 StartRotation = new Vector3(0, 0, -90);
+    private List<MemoryCard> cards = new ();
+    private Vector3 StartRotation = new (0, 0, -90);
     private MemoryCard firstCard, secondCard;
     public static bool isCheckingMatch = false;
     [SerializeField] private GameObject cam;

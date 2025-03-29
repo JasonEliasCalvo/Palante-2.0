@@ -10,10 +10,10 @@ public class MemoryCard : MonoBehaviour
     public GameObject frontSide;
     public GameObject backSide;
 
-    private bool isFlipped = false;
-    [SerializeField] private bool isMatched = false;
-    [SerializeField] private Vector3 HideRotation = new Vector3(0, 0, -90);
-    [SerializeField] private Vector3 FlipRotation = new Vector3(180, 0, -90);
+    private bool isFlipped;
+    [SerializeField] private bool isMatched;
+    [SerializeField] private Vector3 HideRotation = new (0, 0, -90);
+    [SerializeField] private Vector3 FlipRotation = new (180, 0, -90);
 
     [SerializeField] private float duration = 1f;
     public static UnityAction<MemoryCard> OnCardFlipped;
