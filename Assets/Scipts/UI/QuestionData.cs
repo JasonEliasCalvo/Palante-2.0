@@ -15,17 +15,4 @@ public class QuestionData : ScriptableObject
 
     [SerializeField] private int questionID;
     public int QuestionID => questionID;
-
-    bool haveId = false;
-    public void Awake()
-    {
-        if (questionID > 0) { return; }
-        if (haveId) { return; }
-        int lastID = PlayerPrefs.GetInt(idQuestion, 0);
-        lastID++;
-        PlayerPrefs.SetInt(idQuestion, lastID);
-        PlayerPrefs.Save();
-        questionID = lastID;
-        haveId = true;
-    }
 }

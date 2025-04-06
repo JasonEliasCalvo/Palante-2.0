@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class TriggerZone : MonoBehaviour
 {
     public string interactionTag;
-
+    public InteractableOptions interactableOptions;
     [Space(20)]
 
     public UnityEvent onTriggerEnter;
@@ -16,7 +16,7 @@ public class TriggerZone : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if(!InteractableOptions.possibleInteract) { return; }
+        if(!interactableOptions.possibleInteract) { return; }
 
         if (other.CompareTag(interactionTag))
         {
@@ -26,7 +26,7 @@ public class TriggerZone : MonoBehaviour
 
     public void OnTriggerStay(Collider other)
     {
-        if (!InteractableOptions.possibleInteract) { return; }
+        if (!interactableOptions.possibleInteract) { return; }
 
         if (other.CompareTag(interactionTag))
         {

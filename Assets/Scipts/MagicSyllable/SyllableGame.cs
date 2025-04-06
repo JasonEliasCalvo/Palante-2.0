@@ -10,6 +10,15 @@ public class SyllableGame : MonoBehaviour
 {
     [SerializeField] private List<WordData> wordList;
     [SerializeField] private AllSyllableData syllableDatas;
+    [SerializeField] private int maxChoices = 4;
+    [SerializeField] private int maxCorrectAnswers = 10;
+    [SerializeField] private GameObject syllableButtonPrefab;
+    [SerializeField] private TextMeshProUGUI syllableText;
+    [SerializeField] private Transform syllableContainer;
+    [SerializeField] private TextMeshProUGUI livesText;
+    [SerializeField] private AudioSource correctSound;
+    [SerializeField] private AudioSource incorrectSound;
+
     public bool randomOrder = true;
 
     private int currentWordIndex = 0;
@@ -18,19 +27,20 @@ public class SyllableGame : MonoBehaviour
 
     private List<WordData> remainingWords;
 
-    [SerializeField] private TextMeshProUGUI livesText;
-    [SerializeField] private AudioSource correctSound;
-    [SerializeField] private AudioSource incorrectSound;
-
     private void Start()
     {
         GameManager.instance.eventSyllableGameStart += StartGame;
-        livesText.text = "Vidas: " + lives;
+        GameManager.instance.eventSyllableGameEnd += SyllableGameEnd;
     }
 
     private void StartGame()
     {
+        currentWordIndex = 0;
+        correctAnswers = 0;
+        lives = 3;
+        livesText.text = "Vidas: " + lives;
         UIManager.instance.ShowSyllableGamePanel(true);
+        GameManager.instance.InitialGameEnd();
 
         remainingWords = new List<WordData>(wordList);
 
@@ -44,7 +54,7 @@ public class SyllableGame : MonoBehaviour
 
     private void ShowNextWord()
     {
-        if (correctAnswers >= 10 || currentWordIndex >= remainingWords.Count)
+        if (correctAnswers >= maxCorrectAnswers || currentWordIndex >= remainingWords.Count)
         {
             SyllableGameWin();
             return;
@@ -52,24 +62,23 @@ public class SyllableGame : MonoBehaviour
 
         if (lives <= 0)
         {
-            UIManager.instance.ShowSyllableGamePanel(false);
-            GameManager.instance.SyllableGameEnd();
+            SyllableGameEnd();
             return;
         }
 
         WordData currentWord = remainingWords[currentWordIndex];
-        UIManager.instance.GetSyllableText().text = currentWord.fullWord.Replace(currentWord.correctSyllable, "...");
+        syllableText.text = currentWord.fullWord.Replace(currentWord.correctSyllable, "...");
         GenerateChoices(currentWord);
     }
 
     private void GenerateChoices(WordData word)
     {
-        Transform container = UIManager.instance.GetSyllableContainer();
+        Transform container = syllableContainer;
         foreach (Transform child in container) Destroy(child.gameObject);
 
         List<string> choices = new List<string>(word.syllables);
 
-        while (choices.Count < 4)
+        while (choices.Count < maxChoices)
         {
             string fakeSyllable = syllableDatas.allSyllables[Random.Range(0, syllableDatas.allSyllables.Count)];
 
@@ -79,9 +88,11 @@ public class SyllableGame : MonoBehaviour
             }
         }
 
+        choices = choices.OrderBy(x => Random.value).ToList();
+
         foreach (var choice in choices)
         {
-            GameObject button = Instantiate(UIManager.instance.GetSyllableButtonPrefab(), container);
+            GameObject button = Instantiate(syllableButtonPrefab, container);
             button.GetComponentInChildren<TextMeshProUGUI>().text = choice;
             button.GetComponent<Button>().onClick.AddListener(() => CheckAnswer(choice, word.correctSyllable));
         }
@@ -112,7 +123,13 @@ public class SyllableGame : MonoBehaviour
     private void SyllableGameWin()
     {
         Debug.Log("Ganaste");
+        SyllableGameEnd();
+
+    }
+
+    private void SyllableGameEnd()
+    {
         UIManager.instance.ShowSyllableGamePanel(false);
-        GameManager.instance.SyllableGameEnd();
+        GameManager.instance.InitialGameStart();
     }
 }

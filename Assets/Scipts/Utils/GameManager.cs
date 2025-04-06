@@ -5,8 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public delegate void DelegatedGameStates();
-    public DelegatedGameStates eventGameStart;
-    public DelegatedGameStates eventGameEnd;
+    public DelegatedGameStates eventInitialGameStart;
+    public DelegatedGameStates eventInitialGameEnd;
     public DelegatedGameStates eventTypingGameStart;
     public DelegatedGameStates eventTypingGameReset;
     public DelegatedGameStates eventTypingGameEnd;
@@ -34,12 +34,17 @@ public class GameManager : MonoBehaviour
     public void GamePrepate()
     {
         timer = FindObjectOfType<Timer>();
-        Invoke(nameof(GameStart), 0.2f);
+        Invoke(nameof(InitialGameStart), 0.2f);
     }
 
-    public void GameStart()
+    public void InitialGameStart()
     {
-        eventGameStart?.Invoke();
+        eventInitialGameStart?.Invoke();
+    }
+
+    public void InitialGameEnd()
+    {
+        eventInitialGameEnd?.Invoke();
     }
 
     public void GamePause()
@@ -76,11 +81,6 @@ public class GameManager : MonoBehaviour
     public void SyllableGameEnd()
     {
         eventSyllableGameEnd?.Invoke();
-    }
-
-    public void GameEnd()
-    {
-        eventGameEnd?.Invoke();
     }
 
     public Timer GetTimer()

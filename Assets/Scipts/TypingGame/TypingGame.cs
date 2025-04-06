@@ -26,7 +26,7 @@ public class TypingGame : TypingController
     private void StartTypingGame()
     {
         IsTypingGameActive = true;
-        GameManager.instance.GameEnd();
+        GameManager.instance.InitialGameEnd();
         startPlayerPosition = player.position;
         WordText.text = TargetWord;
         CreatePlatforms();
@@ -122,7 +122,7 @@ public class TypingGame : TypingController
     IEnumerator EndTyping()
     {
         yield return new WaitForSeconds(1f);
-        GameManager.instance.GameStart();
+        GameManager.instance.InitialGameStart();
         UIManager.instance.ShowTypingPanel(false);
         UIManager.instance.ShowTimerPanel(false);
     }

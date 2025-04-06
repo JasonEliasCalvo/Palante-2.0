@@ -20,30 +20,19 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject typingPanel;
     [SerializeField] private GameObject timerPanel;
     [SerializeField] private GameObject syllableGamePanel;
-    [SerializeField] private GameObject syllableButtonPrefab;
-    [SerializeField] private TextMeshProUGUI syllableText;
-    [SerializeField] private Transform syllableContainer;
 
     [Header("UI Settings")]
     public KeyCode dialogueKey = KeyCode.F;
 
-    //[Serializable]
-    //public class DialogueUI
-    //{
-    //    public GameObject interactablePanel;
-    //    public GameObject dialoguePanel;
-    //    public GameObject choicesPanel;
+    public class TypingUI
+    {
+        public GameObject typingPanel;
+    }
 
-    //    public TextMeshProUGUI dialogueText;
-    //    public TextMeshProUGUI choicesText;
-    //    public Transform choicesContainer;
-    //    public GameObject choiceButtonPrefab;
-    //}
-
-    //[Header("Dialogue Elements")]
-    //[SerializeField] private DialogueUI dialogueUI;
-
-    //public DialogueUI GetDialogueUI() => dialogueUI;
+    public class SyllablePanelUI
+    {
+        public GameObject syllableGamePanel;
+    }
 
     private void Awake()
     {
@@ -61,7 +50,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowInteractablePanel(bool state)
     {
-        if (!IsInterractionActive())
+        if (!IsPanelActive())
         {
             interactablePanel.SetActive(state);
         }
@@ -93,14 +82,14 @@ public class UIManager : MonoBehaviour
 
     public void ShowSyllableGamePanel(bool state) => syllableGamePanel.SetActive(state);
 
-    public bool IsInterractionActive()
+    public bool IsPanelActive()
     {
         return dialoguePanel.activeSelf || syllableGamePanel.activeSelf || choicesPanel.activeSelf || typingPanel.activeSelf;
     }
 
-    public GameObject GetSyllableButtonPrefab() => syllableButtonPrefab;
-    public Transform GetSyllableContainer() => syllableContainer;
-    public TextMeshProUGUI GetSyllableText() => syllableText;
+    //public GameObject GetSyllableButtonPrefab() => syllableButtonPrefab;
+    //public Transform GetSyllableContainer() => syllableContainer;
+    //public TextMeshProUGUI GetSyllableText() => syllableText;
     public TextMeshProUGUI GetDialogueText() => dialogueText;
     public TextMeshProUGUI GetQuestionText() => choicesText;
     public Transform GetChoiceContainer() => choicesContainer;
