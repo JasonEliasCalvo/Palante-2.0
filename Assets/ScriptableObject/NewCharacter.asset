@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3f3a1fedaaba3b4faf8abec2819d9e7, type: 3}
-  m_Name: Tercer dialogo
+  m_Script: {fileID: 11500000, guid: bac4d7fae22fb7541840dffc03481563, type: 3}
+  m_Name: NewCharacter
   m_EditorClassIdentifier: 
-  dialogueLines:
-  - Leo
-  - Chao
-  dialogueID: 3
+  characterImage: {fileID: 21300000, guid: 9f01aed1111512c4dae857d7f4ee2327, type: 3}
+  gender: 1
+  emotion: 1

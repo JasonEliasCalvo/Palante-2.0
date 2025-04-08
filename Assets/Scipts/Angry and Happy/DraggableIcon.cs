@@ -1,19 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+public enum GenderType
+{
+    none,
+    male,
+    Female
+}
+
+public enum EmotionType
+{
+    none,
+    Angry,
+    Happy,
+}
 
 public class DraggableIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private Canvas canvas;
-    [SerializeField]private GameObject happyAndAngrypanel;
+    [SerializeField] private GameObject happyAndAngrypanel;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Vector3 originalPosition;
 
-    public string type;
-    public string value;
+    public GenderType gender;
+    public EmotionType emotion;
+    public EnumType enumType;
 
     public RectTransform RectTransform { get => rectTransform; set => rectTransform = value; }
     public Vector3 OriginalPosition { get => originalPosition; set => originalPosition = value; }

@@ -29,6 +29,7 @@ public class DialogueSystem : MonoBehaviour
 
     private DialoguePreData currentDialogue;
     private QuestionPreData currentQuestion;
+    private UnityEvent currentChoiceEvent;
 
     private int currentLine;
     public float typingSpeed = 0.05f;
@@ -40,6 +41,7 @@ public class DialogueSystem : MonoBehaviour
     public void StartDialogue(int indexDialogueData)
     {
         int _indexTemp = 0;
+
         foreach (DialoguePreData value in preDialoguesDatas)
         {
             if (value.preDialogueData.DialogueID != indexDialogueData)
@@ -54,6 +56,7 @@ public class DialogueSystem : MonoBehaviour
 
         currentDialogue = preDialoguesDatas[_indexTemp];
         currentLine = 0;
+
         UIManager.instance.ShowDialoguePanel(true);
         UIManager.instance.ShowChoicesPanel(false);
         StartCoroutine(ShowDialogueLine());
@@ -68,19 +71,25 @@ public class DialogueSystem : MonoBehaviour
         {
             GameManager.instance.InitialGameEnd();
         }
-        if (isChoiceEnd && Input.GetKeyDown(UIManager.instance.dialogueKey)) 
+        if (!choiceInProgress && isChoiceEnd && Input.GetKeyDown(UIManager.instance.dialogueKey))
+        {
+            Endchoice();
+        }
+        else if (isChoiceEnd && Input.GetKeyDown(UIManager.instance.dialogueKey))
         {
             EndDialogue();
-        } 
+        }
         else if (Input.GetKeyDown(UIManager.instance.dialogueKey) && currentLine < currentDialogue.preDialogueData.dialogueLines.Count)
         {
             if (UIManager.instance.GetDialogueText().text == currentDialogue.preDialogueData.dialogueLines[currentLine])
             {
                 NextDialogueLine();
+                UIManager.instance.ShowContinueIcon(false);
             }
             else
             {
                 StopAllCoroutines();
+                UIManager.instance.ShowContinueIcon(true);
                 UIManager.instance.GetDialogueText().text = currentDialogue.preDialogueData.dialogueLines[currentLine];
             }
         }
@@ -89,23 +98,26 @@ public class DialogueSystem : MonoBehaviour
     IEnumerator ShowDialogueLine()
     {
         UIManager.instance.GetDialogueText().text = string.Empty;
-
         foreach (char ch in currentDialogue.preDialogueData.dialogueLines[currentLine])
         {
             UIManager.instance.GetDialogueText().text += ch;
             yield return new WaitForSeconds(typingSpeed);
         }
+
+        UIManager.instance.ShowContinueIcon(true);
     }
 
     private void NextDialogueLine()
     {
         currentLine++;
+
         if (currentLine < currentDialogue.preDialogueData.dialogueLines.Count)
         {
             StartCoroutine(ShowDialogueLine());
         }
         else
         {
+            UIManager.instance.ShowContinueIcon(false);
             EndDialogue();
             currentDialogue.onDialogueFinished?.Invoke();
         }
@@ -113,7 +125,9 @@ public class DialogueSystem : MonoBehaviour
 
     public void ShowChoices(int indexDataQuestion)
     {
+        choiceInProgress = true;
         int _indexTemp = 0;
+
         foreach (QuestionPreData value in preQuestionsDatas)
         {
             if (value.preQuestionData.QuestionID != indexDataQuestion)
@@ -126,7 +140,6 @@ public class DialogueSystem : MonoBehaviour
             }
         }
 
-        choiceInProgress = true;
         currentQuestion = preQuestionsDatas[_indexTemp];
         UIManager.instance.ShowChoicesPanel(true);
         UIManager.instance.ShowDialoguePanel(false);
@@ -173,7 +186,8 @@ public class DialogueSystem : MonoBehaviour
         UIManager.instance.ShowDialoguePanel(true);
         UIManager.instance.ShowChoicesPanel(false);
         UIManager.instance.GetDialogueText().text = currentQuestion.preQuestionData.correctFeedback;
-        currentQuestion.onChoiceCorrectEnd?.Invoke();
+        currentChoiceEvent = currentQuestion.onChoiceCorrectEnd;
+        UIManager.instance.ShowContinueIcon(true);
         choiceInProgress = false;
         isChoiceEnd = true;
     }
@@ -183,22 +197,37 @@ public class DialogueSystem : MonoBehaviour
         UIManager.instance.ShowDialoguePanel(true);
         UIManager.instance.ShowChoicesPanel(false);
         UIManager.instance.GetDialogueText().text = currentQuestion.preQuestionData.incorrectFeedback;
-        currentQuestion.onChoiceIncorrectEnd?.Invoke();
+        currentChoiceEvent = currentQuestion.onChoiceIncorrectEnd;
         isChoiceEnd = true;
         choiceInProgress = false;
     }
 
     public void EndDialogue()
     {
-        StartCoroutine(Delay());
+        StartCoroutine(IEEndDialogue());
     }
 
-    private IEnumerator Delay()
+    public void Endchoice()
+    {
+        StartCoroutine(IEEndChoice());
+    }
+
+    private IEnumerator IEEndDialogue()
     {
         yield return new WaitForSeconds(0.1f);
-        currentLine = 0;
         UIManager.instance.GetDialogueText().text = string.Empty;
         UIManager.instance.ShowDialoguePanel(false);
+        UIManager.instance.ShowContinueIcon(false);
+        GameManager.instance.InitialGameStart();
+        isChoiceEnd = false;
+    }
+    private IEnumerator IEEndChoice()
+    {
+        yield return new WaitForSeconds(0.1f);
+        UIManager.instance.ShowContinueIcon(false);
+        UIManager.instance.GetDialogueText().text = string.Empty;
+        UIManager.instance.ShowDialoguePanel(false);
+        currentChoiceEvent?.Invoke();
         GameManager.instance.InitialGameStart();
         isChoiceEnd = false;
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,31 +14,26 @@ public class HappyAndAngryGame : MonoBehaviour
 
     private CharacterData currentCharacter;
 
-    public Text mensajeResultado;
+    public TextMeshProUGUI mensajeResultado;
     private bool isCheckingMatch;
 
 
     void Start()
     {
-        mensajeResultado.text = "La Respuesta es.....";
         NextCharacter();
+        GameManager.instance.InitialGameEnd();
     }
 
-    private void OnEnable()
+    private void Update()
     {
-       /// DropSlot.OnDropIcon += CheckAnswer;
-    }
-
-    private void OnDisable()
-    {
-        //DropSlot.OnDropIcon -= CheckAnswer;
+        CheckSlots();
     }
 
     public void NextCharacter()
     {
-        mensajeResultado.text = "";
-        slotGender.SelectedValue = "";
-        slotEmocion.SelectedValue = "";
+        mensajeResultado.text = "La Respuesta es.....";
+        slotGender.gender = GenderType.none;
+        slotEmocion.emotion = EmotionType.none;
 
         currentCharacter = characters[0];
         characterImage.sprite = currentCharacter.characterImage;
@@ -45,39 +41,37 @@ public class HappyAndAngryGame : MonoBehaviour
 
     private void CheckSlots()
     {
-        if (isCheckingMatch) return;
-
-        if (slotEmocion != null && slotGender)
+        if (slotEmocion.emotion != EmotionType.none && slotGender.gender != GenderType.none && !isCheckingMatch) 
         {
             isCheckingMatch = true;
+            Debug.Log("Chekeo");
             CheckAnswer();
         }
     }
 
     public void CheckAnswer()
     {
-        if (slotGender.SelectedValue != currentCharacter.gender || slotEmocion.SelectedValue != currentCharacter.emotion)
+        if (slotGender.gender == currentCharacter.gender && slotEmocion.emotion == currentCharacter.emotion)
         {
-
+            Win();
         }
-        if (slotGender.SelectedValue == currentCharacter.gender || slotEmocion.SelectedValue == currentCharacter.emotion)
+        else
         {
-
-            CheckGameOver();
+            GameOver();
         }
-
         isCheckingMatch = false;
     }
 
-    private void CheckGameOver()
+    private void GameOver()
     {
-        
+        GameManager.instance.InitialGameStart();
+        Debug.Log("¡Perdiste!");
     }
 
     private void Win()
     {
         GameManager.instance.InitialGameStart();
-        Debug.Log("🎉 ¡Ganaste!");
+        Debug.Log("¡Ganaste!");
     }
 
 }

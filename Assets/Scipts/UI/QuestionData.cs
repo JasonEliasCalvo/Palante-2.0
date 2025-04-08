@@ -11,8 +11,6 @@ public class QuestionData : ScriptableObject
     [TextArea(3, 3)] public string incorrectFeedback = "Incorrecto. Intenta de nuevo.";
     public int correctAnswerIndex;
 
-    private string idQuestion = "LastQuestionID";
-
     [SerializeField] private int questionID;
     public int QuestionID => questionID;
 }

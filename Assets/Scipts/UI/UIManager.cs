@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI choicesText;
     [SerializeField] private Transform choicesContainer;
     [SerializeField] private GameObject choiceButtonPrefab;
+    [SerializeField] private GameObject _continueIcon;
 
     [Header("UI Game Elements")]
     [SerializeField] private GameObject interactablePanel;
@@ -24,15 +25,8 @@ public class UIManager : MonoBehaviour
     [Header("UI Settings")]
     public KeyCode dialogueKey = KeyCode.F;
 
-    public class TypingUI
-    {
-        public GameObject typingPanel;
-    }
+    public void ShowContinueIcon(bool state) => _continueIcon.SetActive(state);
 
-    public class SyllablePanelUI
-    {
-        public GameObject syllableGamePanel;
-    }
 
     private void Awake()
     {

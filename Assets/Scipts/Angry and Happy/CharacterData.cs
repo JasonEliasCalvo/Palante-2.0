@@ -6,6 +6,6 @@ using UnityEngine;
 public class CharacterData : ScriptableObject
 {
     public Sprite characterImage;
-    public string gender;
-    public string emotion; 
+    public GenderType gender;
+    public EmotionType emotion; 
 }

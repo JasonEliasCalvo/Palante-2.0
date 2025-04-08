@@ -9,8 +9,6 @@ public class DialogueData : ScriptableObject
 {
     [TextArea(4, 6)] public List<string> dialogueLines;
 
-    private string idDialogue = "LastDialogueID";
-
     [SerializeField] private int dialogueID;
     public int DialogueID => dialogueID;
 }
