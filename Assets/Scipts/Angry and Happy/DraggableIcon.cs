@@ -26,6 +26,7 @@ public class DraggableIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private Vector3 originalPosition;
+    private Transform originalParent;
 
     public GenderType gender;
     public EmotionType emotion;
@@ -33,6 +34,7 @@ public class DraggableIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public RectTransform RectTransform { get => rectTransform; set => rectTransform = value; }
     public Vector3 OriginalPosition { get => originalPosition; set => originalPosition = value; }
+    public Transform OriginalParent { get => originalParent; set => originalParent = value; }
 
     private void Awake()
     {
@@ -40,10 +42,15 @@ public class DraggableIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         canvasGroup = GetComponent<CanvasGroup>();
         canvas = GetComponentInParent<Canvas>();
         originalPosition = rectTransform.position;
+        OriginalParent = transform.parent;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (transform.parent != transform.parent)
+        {
+            RectTransform.position = OriginalPosition;
+        }
         canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0.6f;
     }
@@ -58,9 +65,8 @@ public class DraggableIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         canvasGroup.blocksRaycasts = true;
         canvasGroup.alpha = 1f;
 
-        if (transform.parent == happyAndAngrypanel.transform)
+        if (transform.parent == OriginalParent)
         {
-            RectTransform.SetParent(happyAndAngrypanel.transform);
             RectTransform.position = OriginalPosition;
         }
     }

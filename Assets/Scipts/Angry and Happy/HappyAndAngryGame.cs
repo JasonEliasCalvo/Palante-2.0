@@ -13,6 +13,7 @@ public class HappyAndAngryGame : MonoBehaviour
     public DropSlot slotEmocion;
 
     private CharacterData currentCharacter;
+    private int characterIndex;
 
     public TextMeshProUGUI mensajeResultado;
     private bool isCheckingMatch;
@@ -20,7 +21,7 @@ public class HappyAndAngryGame : MonoBehaviour
 
     void Start()
     {
-        NextCharacter();
+        StartCharacter();
         GameManager.instance.InitialGameEnd();
     }
 
@@ -29,13 +30,13 @@ public class HappyAndAngryGame : MonoBehaviour
         CheckSlots();
     }
 
-    public void NextCharacter()
+    public void StartCharacter()
     {
         mensajeResultado.text = "La Respuesta es.....";
         slotGender.gender = GenderType.none;
         slotEmocion.emotion = EmotionType.none;
-
-        currentCharacter = characters[0];
+        characterIndex = 0;
+        currentCharacter = characters[characterIndex];
         characterImage.sprite = currentCharacter.characterImage;
     }
 
@@ -49,9 +50,15 @@ public class HappyAndAngryGame : MonoBehaviour
         }
     }
 
+
+
     public void CheckAnswer()
     {
-        if (slotGender.gender == currentCharacter.gender && slotEmocion.emotion == currentCharacter.emotion)
+        if (slotGender.gender == currentCharacter.gender && slotEmocion.emotion == currentCharacter.emotion && characterIndex < characters.Count -1)
+        {
+            NextCharacter();
+        }
+        else if (slotGender.gender == currentCharacter.gender && slotEmocion.emotion == currentCharacter.emotion)
         {
             Win();
         }
@@ -59,7 +66,17 @@ public class HappyAndAngryGame : MonoBehaviour
         {
             GameOver();
         }
+    }
+
+    public void NextCharacter()
+    {
+        characterIndex++;
+        slotGender.gender = GenderType.none;
+        slotEmocion.emotion = EmotionType.none;
+        currentCharacter = characters[characterIndex];
+        characterImage.sprite = currentCharacter.characterImage;
         isCheckingMatch = false;
+        Debug.Log("Sigue");
     }
 
     private void GameOver()

@@ -18,10 +18,16 @@ public class DropSlot : MonoBehaviour, IDropHandler
     public EmotionType emotion;
 
     public EnumType enumType;
-
+    private DraggableIcon icon;
     public void OnDrop(PointerEventData eventData)
     {
-        DraggableIcon icon = eventData.pointerDrag.GetComponent<DraggableIcon>();
+        if (icon != null)
+        {
+            icon.RectTransform.position = icon.OriginalPosition;
+            icon.transform.SetParent(icon.OriginalParent);
+        }
+
+        icon = eventData.pointerDrag.GetComponent<DraggableIcon>();
 
         if (icon != null && enumType.isGender == icon.enumType.isGender)
         {
@@ -35,11 +41,6 @@ public class DropSlot : MonoBehaviour, IDropHandler
             icon.RectTransform.SetParent(transform);
             icon.RectTransform.position = transform.position;
             emotion = icon.emotion;
-        }
-
-        else
-        {
-            icon.RectTransform.position = icon.OriginalPosition;
         }
     }
 
