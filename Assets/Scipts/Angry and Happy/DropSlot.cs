@@ -29,19 +29,21 @@ public class DropSlot : MonoBehaviour, IDropHandler
 
         icon = eventData.pointerDrag.GetComponent<DraggableIcon>();
 
-        if (icon != null && enumType.isGender == icon.enumType.isGender)
+        if(icon != null )
         {
-            icon.RectTransform.SetParent(transform);
-            icon.RectTransform.position = transform.position;
-            gender = icon.gender;
-        }
+            if (enumType.isGender == icon.enumType.isGender)
+            {
+                icon.RectTransform.SetParent(transform);
+                icon.RectTransform.position = transform.position;
+                gender = icon.gender;
+            }
 
-        if (icon != null && enumType.isEmotion == icon.enumType.isEmotion)
-        {
-            icon.RectTransform.SetParent(transform);
-            icon.RectTransform.position = transform.position;
-            emotion = icon.emotion;
+            if (enumType.isEmotion == icon.enumType.isEmotion)
+            {
+                icon.RectTransform.SetParent(transform);
+                icon.RectTransform.position = transform.position;
+                emotion = icon.emotion;
+            }
         }
     }
-
 }

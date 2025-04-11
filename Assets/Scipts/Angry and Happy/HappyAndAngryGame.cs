@@ -1,8 +1,10 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UI;
 
 public class HappyAndAngryGame : MonoBehaviour
@@ -38,6 +40,17 @@ public class HappyAndAngryGame : MonoBehaviour
         characterIndex = 0;
         currentCharacter = characters[characterIndex];
         characterImage.sprite = currentCharacter.characterImage;
+        ResetDraggableIcons();
+    }
+
+    private void ResetDraggableIcons()
+    {
+        DraggableIcon[] icon = FindObjectsOfType<DraggableIcon>();
+
+        foreach(DraggableIcon draggableIcon in icon)
+        {
+            draggableIcon.ResetPosition();
+        }
     }
 
     private void CheckSlots()
@@ -51,16 +64,14 @@ public class HappyAndAngryGame : MonoBehaviour
     }
 
 
-
     public void CheckAnswer()
     {
-        if (slotGender.gender == currentCharacter.gender && slotEmocion.emotion == currentCharacter.emotion && characterIndex < characters.Count -1)
+        if (slotGender.gender == currentCharacter.gender && slotEmocion.emotion == currentCharacter.emotion)
         {
-            NextCharacter();
-        }
-        else if (slotGender.gender == currentCharacter.gender && slotEmocion.emotion == currentCharacter.emotion)
-        {
-            Win();
+            if (characterIndex < characters.Count - 1)
+                NextCharacter();
+            else
+                Win();
         }
         else
         {

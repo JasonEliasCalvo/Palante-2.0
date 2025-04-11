@@ -47,9 +47,9 @@ public class DraggableIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (transform.parent != transform.parent)
+        if (transform.parent != originalParent)
         {
-            RectTransform.position = OriginalPosition;
+            transform.SetParent(OriginalParent);
         }
         canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0.6f;
@@ -67,7 +67,13 @@ public class DraggableIcon : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (transform.parent == OriginalParent)
         {
-            RectTransform.position = OriginalPosition;
+            ResetPosition();
         }
+    }
+
+    public void ResetPosition()
+    {
+        RectTransform.position = OriginalPosition;
+        transform.SetParent(OriginalParent);
     }
 }
